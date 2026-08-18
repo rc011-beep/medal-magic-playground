@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EXERCISES, type ModuleDef } from "@/lib/progress";
+import { EXERCISES, getHints, type ModuleDef } from "@/lib/progress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress as ProgressBar } from "@/components/ui/progress";
@@ -18,11 +18,15 @@ export function ExerciseDialog({
   const [step, setStep] = useState(0);
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+  const [attempts, setAttempts] = useState(0);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   useEffect(() => {
     setStep(0);
     setValue("");
     setStatus("idle");
+    setAttempts(0);
+    setShowAnswer(false);
   }, [module?.id]);
 
   if (!module) return null;
@@ -31,10 +35,19 @@ export function ExerciseDialog({
   const current = exercises[step];
   if (!current) return null;
   const pct = Math.round((step / exercises.length) * 100);
+  const answer = current.a + current.b;
+  const hints = getHints(current.a, current.b);
+  const hintIndex = Math.min(attempts - 1, hints.length - 1);
+  const currentHint = attempts > 0 ? hints[hintIndex] : null;
 
   const check = (e: React.FormEvent) => {
     e.preventDefault();
-    if (Number(value) !== current.a + current.b) {
+    if (showAnswer) {
+      onComplete();
+      return;
+    }
+    if (Number(value) !== answer) {
+      setAttempts((a) => a + 1);
       setStatus("error");
       return;
     }
@@ -48,6 +61,12 @@ export function ExerciseDialog({
     }
     setStep(next);
     setTimeout(() => setStatus("idle"), 600);
+  };
+
+  const revealAnswer = () => {
+    setShowAnswer(true);
+    setValue(String(answer));
+    setStatus("ok");
   };
 
   return (
@@ -89,21 +108,39 @@ export function ExerciseDialog({
             status === "error" ? "border-destructive" : ""
           }`}
         />
-        {status === "error" && (
-          <p className="mt-2 text-center text-sm text-destructive">
-            Casi. Revisa tu suma e inténtalo de nuevo.
+
+        {currentHint && (
+          <div className="mt-3 rounded-xl bg-accent/10 p-3 text-sm text-foreground animate-in fade-in slide-in-from-top-1">
+            <span className="font-semibold text-accent">💡 {currentHint}</span>
+          </div>
+        )}
+
+        {status === "ok" && !showAnswer && (
+          <p className="mt-2 text-center text-sm text-accent">¡Correcto!</p>
+        )}
+
+        {showAnswer && (
+          <p className="mt-2 text-center text-sm text-muted-foreground">
+            Se ha revelado la respuesta. Pulsa "Continuar" para avanzar.
           </p>
         )}
-        {status === "ok" && (
-          <p className="mt-2 text-center text-sm text-accent">¡Correcto!</p>
+
+        {attempts >= 2 && !showAnswer && (
+          <button
+            type="button"
+            onClick={revealAnswer}
+            className="mt-3 w-full text-center text-xs font-medium text-accent underline underline-offset-2"
+          >
+            No lo tengo claro · mostrar respuesta
+          </button>
         )}
 
         <div className="mt-6 flex gap-2">
           <Button type="button" variant="secondary" className="flex-1" onClick={onClose}>
             Salir
           </Button>
-          <Button type="submit" className="flex-1" disabled={value.trim() === ""}>
-            Comprobar
+          <Button type="submit" className="flex-1" disabled={value.trim() === "" && !showAnswer}>
+            {showAnswer ? "Continuar" : "Comprobar"}
           </Button>
         </div>
       </form>
