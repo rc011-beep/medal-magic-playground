@@ -42,10 +42,6 @@ export function ExerciseDialog({
 
   const check = (e: React.FormEvent) => {
     e.preventDefault();
-    if (showAnswer) {
-      onComplete();
-      return;
-    }
     if (Number(value) !== answer) {
       setAttempts((a) => a + 1);
       setStatus("error");
@@ -54,6 +50,7 @@ export function ExerciseDialog({
     const next = step + 1;
     setValue("");
     setStatus("ok");
+    setShowAnswer(false);
     onProgress(Math.round((next / exercises.length) * 100));
     if (next >= exercises.length) {
       onComplete();
@@ -65,8 +62,7 @@ export function ExerciseDialog({
 
   const revealAnswer = () => {
     setShowAnswer(true);
-    setValue(String(answer));
-    setStatus("ok");
+    setStatus("idle");
   };
 
   return (
