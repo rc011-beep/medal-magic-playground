@@ -55,6 +55,35 @@ export const EXERCISES: Record<ModuleId, Exercise[]> = {
   "modulo-final": [{ a: 68, b: 57 }],
 };
 
+export function getHints(a: number, b: number): string[] {
+  const sum = a + b;
+  const tens = (n: number) => Math.floor(n / 10) * 10;
+  const units = (n: number) => n % 10;
+
+  const ta = tens(a);
+  const ua = units(a);
+  const tb = tens(b);
+  const ub = units(b);
+  const sumTens = ta + tb;
+  const sumUnits = ua + ub;
+
+  const hints: string[] = ["Casi. Revisa tu suma e inténtalo de nuevo."];
+
+  if (ta > 0 || tb > 0) {
+    hints.push(
+      `Pista: separa las decenas y las unidades. ${a} = ${ta} + ${ua}, ${b} = ${tb} + ${ub}`,
+      `Suma las decenas: ${ta} + ${tb} = ${sumTens}. Suma las unidades: ${ua} + ${ub} = ${sumUnits}.`,
+      `Ahora suma todo: ${sumTens} + ${sumUnits} = ${sum}.`,
+    );
+  } else {
+    hints.push(
+      `Pista: cuenta desde ${a} ${b} números más hasta llegar a ${sum}.`,
+    );
+  }
+
+  return hints;
+}
+
 export type Progress = Record<ModuleId, number>;
 
 export const EMPTY_PROGRESS: Progress = {
