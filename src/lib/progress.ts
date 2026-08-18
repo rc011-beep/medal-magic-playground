@@ -46,6 +46,35 @@ export const MODULES: ModuleDef[] = [
   },
 ];
 
+export type Exercise = { a: number; b: number };
+
+export const EXERCISES: Record<ModuleId, Exercise[]> = {
+  "modulo-1": [
+    { a: 12, b: 13 },
+    { a: 24, b: 15 },
+    { a: 31, b: 26 },
+    { a: 45, b: 22 },
+  ],
+  "modulo-2": [
+    { a: 27, b: 18 },
+    { a: 36, b: 29 },
+    { a: 48, b: 34 },
+    { a: 53, b: 27 },
+  ],
+  "modulo-3": [
+    { a: 57, b: 38 },
+    { a: 64, b: 29 },
+    { a: 78, b: 16 },
+    { a: 85, b: 47 },
+  ],
+  "modulo-final": [
+    { a: 68, b: 57 },
+    { a: 74, b: 89 },
+    { a: 96, b: 48 },
+    { a: 87, b: 95 },
+  ],
+};
+
 export type Progress = Record<ModuleId, number>;
 
 export const EMPTY_PROGRESS: Progress = {
@@ -87,6 +116,13 @@ export function useProgress() {
     }
   }, []);
 
+  const setModuleProgress = useCallback(
+    (id: ModuleId, value: number) => {
+      persist({ ...read(), [id]: Math.max(0, Math.min(100, Math.round(value))) });
+    },
+    [persist],
+  );
+
   const completeModule = useCallback(
     (id: ModuleId) => {
       persist({ ...read(), [id]: 100 });
@@ -98,5 +134,5 @@ export function useProgress() {
     persist({ ...EMPTY_PROGRESS });
   }, [persist]);
 
-  return { progress, hydrated, completeModule, resetAll };
+  return { progress, hydrated, completeModule, setModuleProgress, resetAll };
 }
