@@ -3,6 +3,8 @@ import { useState } from "react";
 import { MODULES, useProgress, type ModuleDef, type ModuleId } from "@/lib/progress";
 import { MedalModal } from "@/components/MedalModal";
 import { DevPanel } from "@/components/DevPanel";
+import { ExerciseDialog } from "@/components/ExerciseDialog";
+import { Button } from "@/components/ui/button";
 import { Progress as ProgressBar } from "@/components/ui/progress";
 
 export const Route = createFileRoute("/")({
@@ -28,8 +30,10 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { progress, hydrated, completeModule, resetAll } = useProgress();
+  const { progress, hydrated, completeModule, setModuleProgress, resetAll } =
+    useProgress();
   const [celebrating, setCelebrating] = useState<ModuleDef | null>(null);
+  const [practicing, setPracticing] = useState<ModuleDef | null>(null);
 
   const earned = MODULES.filter((m) => progress[m.id] >= 100);
   const overall = Math.round(
@@ -90,6 +94,14 @@ function Index() {
                 <p className="mt-1 text-sm text-muted-foreground">{m.summary}</p>
                 <ProgressBar value={value} className="mt-4" />
                 <p className="mt-2 text-xs text-muted-foreground">{value}% completado</p>
+                <Button
+                  variant={done ? "secondary" : "default"}
+                  size="sm"
+                  className="mt-4 w-full"
+                  onClick={() => setPracticing(m)}
+                >
+                  {done ? "Repasar ejercicios" : "Resolver ejercicios"}
+                </Button>
               </article>
             );
           })}
@@ -134,6 +146,19 @@ function Index() {
       </section>
 
       <DevPanel progress={progress} onComplete={handleComplete} onReset={resetAll} />
+      <ExerciseDialog
+        module={practicing}
+        onClose={() => setPracticing(null)}
+        onProgress={(value) => {
+          if (practicing) setModuleProgress(practicing.id, value);
+        }}
+        onComplete={() => {
+          if (!practicing) return;
+          completeModule(practicing.id);
+          setCelebrating(practicing);
+          setPracticing(null);
+        }}
+      />
       <MedalModal module={celebrating} onClose={() => setCelebrating(null)} />
     </main>
   );
