@@ -116,8 +116,8 @@ export function ExerciseDialog({
         )}
 
         {showAnswer && (
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            Se ha revelado la respuesta. Pulsa "Continuar" para avanzar.
+          <p className="mt-2 text-center text-sm text-accent">
+            La respuesta correcta es <strong>{answer}</strong>. Escríbela en el campo para continuar.
           </p>
         )}
 
