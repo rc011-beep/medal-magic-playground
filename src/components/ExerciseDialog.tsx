@@ -135,7 +135,7 @@ export function ExerciseDialog({
           <Button type="button" variant="secondary" className="flex-1" onClick={onClose}>
             Salir
           </Button>
-          <Button type="submit" className="flex-1" disabled={value.trim() === "" && !showAnswer}>
+          <Button type="submit" className="flex-1" disabled={value.trim() === ""}>
             {showAnswer ? "Continuar" : "Comprobar"}
           </Button>
         </div>
