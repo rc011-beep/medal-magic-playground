@@ -75,14 +75,20 @@ function Index() {
       <section className="mx-auto max-w-4xl px-6 py-12">
         <h2 className="text-lg font-semibold text-foreground">Módulos</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {MODULES.map((m) => {
+          {MODULES.map((m, i) => {
             const value = hydrated ? progress[m.id] : 0;
             const done = value >= 100;
+            const prev = MODULES[i - 1];
+            const locked = !!prev && (hydrated ? progress[prev.id] : 0) < 100;
             return (
               <article
                 key={m.id}
                 className={`rounded-2xl border p-5 transition-colors ${
-                  done ? "border-accent bg-accent/5" : "border-border bg-card"
+                  done
+                    ? "border-accent bg-accent/5"
+                    : locked
+                      ? "border-dashed border-border bg-muted/40 opacity-70"
+                      : "border-border bg-card"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -91,20 +97,30 @@ function Index() {
                     {done ? m.medalIcon : "🔒"}
                   </span>
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">{m.summary}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {locked
+                    ? `Completa ${prev?.title.split(" · ")[0]} para desbloquear.`
+                    : m.summary}
+                </p>
                 <ProgressBar value={value} className="mt-4" />
                 <p className="mt-2 text-xs text-muted-foreground">{value}% completado</p>
                 <Button
                   variant={done ? "secondary" : "default"}
                   size="sm"
                   className="mt-4 w-full"
+                  disabled={locked}
                   onClick={() => setPracticing(m)}
                 >
-                  {done ? "Repasar ejercicios" : "Resolver ejercicios"}
+                  {locked
+                    ? "Bloqueado"
+                    : done
+                      ? "Repasar ejercicios"
+                      : "Resolver ejercicios"}
                 </Button>
               </article>
             );
           })}
+
         </div>
       </section>
 
