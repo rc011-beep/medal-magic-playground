@@ -22,18 +22,21 @@ export function DevPanel({
           </p>
           <p className="mt-1 text-sm text-foreground">Simular completitud de módulos</p>
           <div className="mt-4 space-y-2">
-            {MODULES.map((m) => {
+            {MODULES.map((m, i) => {
               const done = progress[m.id] >= 100;
+              const prev = MODULES[i - 1];
+              const locked = !!prev && progress[prev.id] < 100;
               return (
                 <Button
                   key={m.id}
                   variant={done ? "secondary" : "default"}
                   size="sm"
                   className="w-full justify-between"
+                  disabled={locked}
                   onClick={() => onComplete(m.id)}
                 >
                   <span>{m.title.split(" · ")[0]}</span>
-                  <span aria-hidden>{done ? "✓ 100%" : m.medalIcon}</span>
+                  <span aria-hidden>{done ? "✓ 100%" : locked ? "🔒" : m.medalIcon}</span>
                 </Button>
               );
             })}
