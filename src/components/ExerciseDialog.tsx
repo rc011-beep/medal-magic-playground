@@ -29,6 +29,7 @@ export function ExerciseDialog({
 
   const exercises = EXERCISES[module.id];
   const current = exercises[step];
+  if (!current) return null;
   const pct = Math.round((step / exercises.length) * 100);
 
   const check = (e: React.FormEvent) => {
