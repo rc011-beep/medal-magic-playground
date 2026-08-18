@@ -42,10 +42,6 @@ export function ExerciseDialog({
 
   const check = (e: React.FormEvent) => {
     e.preventDefault();
-    if (showAnswer) {
-      onComplete();
-      return;
-    }
     if (Number(value) !== answer) {
       setAttempts((a) => a + 1);
       setStatus("error");
@@ -54,6 +50,7 @@ export function ExerciseDialog({
     const next = step + 1;
     setValue("");
     setStatus("ok");
+    setShowAnswer(false);
     onProgress(Math.round((next / exercises.length) * 100));
     if (next >= exercises.length) {
       onComplete();
@@ -65,8 +62,7 @@ export function ExerciseDialog({
 
   const revealAnswer = () => {
     setShowAnswer(true);
-    setValue(String(answer));
-    setStatus("ok");
+    setStatus("idle");
   };
 
   return (
@@ -120,8 +116,8 @@ export function ExerciseDialog({
         )}
 
         {showAnswer && (
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            Se ha revelado la respuesta. Pulsa "Continuar" para avanzar.
+          <p className="mt-2 text-center text-sm text-accent">
+            La respuesta correcta es <strong>{answer}</strong>. Escríbela en el campo para continuar.
           </p>
         )}
 
@@ -139,7 +135,7 @@ export function ExerciseDialog({
           <Button type="button" variant="secondary" className="flex-1" onClick={onClose}>
             Salir
           </Button>
-          <Button type="submit" className="flex-1" disabled={value.trim() === "" && !showAnswer}>
+          <Button type="submit" className="flex-1" disabled={value.trim() === ""}>
             {showAnswer ? "Continuar" : "Comprobar"}
           </Button>
         </div>
