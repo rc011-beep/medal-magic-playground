@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
-export type ModuleId = "modulo-1" | "modulo-2" | "modulo-3" | "modulo-final";
+export type ModuleId =
+  | "modulo-1"
+  | "modulo-2"
+  | "modulo-3"
+  | "modulo-final"
+  | "modulo-5"
+  | "modulo-6"
+  | "modulo-7";
 
 export type ModuleDef = {
   id: ModuleId;
@@ -38,11 +45,35 @@ export const MODULES: ModuleDef[] = [
   },
   {
     id: "modulo-final",
-    title: "Módulo Final · Certificación",
+    title: "Módulo 4 · Certificación",
     summary: "Proyecto integrador y evaluación final.",
     medalName: "Estrella de Ventas",
     medalIcon: "🏆",
-    medalDescription: "Cerraste el programa completo. ¡Felicidades!",
+    medalDescription: "Cerraste la primera etapa del programa. ¡Felicidades!",
+  },
+  {
+    id: "modulo-5",
+    title: "Módulo 5 · Visión estratégica",
+    summary: "Análisis profundo y detección de detalles clave.",
+    medalName: "Ojo de Águila",
+    medalIcon: "🦅",
+    medalDescription: "Desarrollaste una visión aguda para detectar oportunidades.",
+  },
+  {
+    id: "modulo-6",
+    title: "Módulo 6 · Construcción de valor",
+    summary: "Diseño y estructura de propuestas de negocio sólidas.",
+    medalName: "Arquitecto de Negocios",
+    medalIcon: "🏗️",
+    medalDescription: "Construiste las bases de negocios escalables.",
+  },
+  {
+    id: "modulo-7",
+    title: "Módulo 7 · Cierre y proyección",
+    summary: "Identificación de oportunidades y plan de acción continuo.",
+    medalName: "Buscador de Oportunidades",
+    medalIcon: "🔍",
+    medalDescription: "Cerraste el programa con una mentalidad de crecimiento.",
   },
 ];
 
@@ -53,6 +84,9 @@ export const EXERCISES: Record<ModuleId, Exercise[]> = {
   "modulo-2": [{ a: 27, b: 18 }],
   "modulo-3": [{ a: 57, b: 38 }],
   "modulo-final": [{ a: 68, b: 57 }],
+  "modulo-5": [{ a: 45, b: 39 }],
+  "modulo-6": [{ a: 83, b: 29 }],
+  "modulo-7": [{ a: 76, b: 65 }],
 };
 
 export function getHints(a: number, b: number): string[] {
@@ -91,6 +125,9 @@ export const EMPTY_PROGRESS: Progress = {
   "modulo-2": 0,
   "modulo-3": 0,
   "modulo-final": 0,
+  "modulo-5": 0,
+  "modulo-6": 0,
+  "modulo-7": 0,
 };
 
 const STORAGE_KEY = "medallas.progreso.v1";
