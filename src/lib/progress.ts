@@ -16,8 +16,8 @@ export const MODULES: ModuleDef[] = [
     id: "modulo-1",
     title: "Módulo 1 · Fundamentos",
     summary: "Conceptos base y primeros pasos del programa.",
-    medalName: "Medalla de Iniciación",
-    medalIcon: "🥉",
+    medalName: "Mente de Acero",
+    medalIcon: "🧠",
     medalDescription: "Completaste los fundamentos del programa.",
   },
   {
