@@ -24,7 +24,7 @@ export const MODULES: ModuleDef[] = [
     id: "modulo-2",
     title: "Módulo 2 · Práctica guiada",
     summary: "Ejercicios aplicados con acompañamiento.",
-    medalName: "Medalla de Constancia",
+    medalName: "Explorador de Talentos",
     medalIcon: "🥈",
     medalDescription: "Superaste la práctica guiada sin rendirte.",
   },
