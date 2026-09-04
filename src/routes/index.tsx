@@ -72,94 +72,113 @@ function Index() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-4xl px-6 py-12">
-        <h2 className="text-lg font-semibold text-foreground">Módulos</h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {MODULES.map((m, i) => {
-            const value = hydrated ? progress[m.id] : 0;
-            const done = value >= 100;
-            const prev = MODULES[i - 1];
-            const locked = !!prev && (hydrated ? progress[prev.id] : 0) < 100;
-            return (
-              <article
-                key={m.id}
-                className={`rounded-2xl border p-5 transition-colors ${
-                  done
-                    ? "border-accent bg-accent/5"
-                    : locked
-                      ? "border-dashed border-border bg-muted/40 opacity-70"
-                      : "border-border bg-card"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-semibold text-foreground">{m.title}</h3>
-                  <span className="text-2xl" aria-hidden>
-                    {done ? m.medalIcon : "🔒"}
-                  </span>
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {locked
-                    ? `Completa ${prev?.title.split(" · ")[0]} para desbloquear.`
-                    : m.summary}
-                </p>
-                <ProgressBar value={value} className="mt-4" />
-                <p className="mt-2 text-xs text-muted-foreground">{value}% completado</p>
-                <Button
-                  variant={done ? "secondary" : "default"}
-                  size="sm"
-                  className="mt-4 w-full"
-                  disabled={locked}
-                  onClick={() => setPracticing(m)}
-                >
-                  {locked
-                    ? "Bloqueado"
-                    : done
-                      ? "Repasar ejercicios"
-                      : "Resolver ejercicios"}
-                </Button>
-              </article>
-            );
-          })}
+      <Tabs defaultValue="modulos" className="mx-auto max-w-4xl px-6 py-12">
+        <TabsList className="w-full sm:w-auto">
+          <TabsTrigger value="modulos" className="flex-1 sm:flex-none">
+            Módulos
+          </TabsTrigger>
+          <TabsTrigger value="logros" className="flex-1 sm:flex-none">
+            Mis Logros ({hydrated ? earned.length : 0}/{MODULES.length})
+          </TabsTrigger>
+        </TabsList>
 
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-4xl px-6 pb-12">
-        <h2 className="text-lg font-semibold text-foreground">Mis Logros</h2>
-        <p className="text-sm text-muted-foreground">
-          {hydrated ? earned.length : 0} de {MODULES.length} medallas desbloqueadas
-        </p>
-        <div className="mt-5 grid gap-4 sm:grid-cols-4">
-          {MODULES.map((m) => {
-            const unlocked = hydrated && progress[m.id] >= 100;
-            return (
-              <div
-                key={m.id}
-                className={`rounded-2xl border p-5 text-center transition-all ${
-                  unlocked
-                    ? "border-accent bg-card shadow-glow"
-                    : "border-dashed border-border bg-muted/40"
-                }`}
-              >
-                <div
-                  className={`mx-auto flex size-14 items-center justify-center rounded-full text-3xl ${
-                    unlocked ? "bg-gradient-medal" : "bg-muted grayscale opacity-50"
+        <TabsContent value="modulos">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            {MODULES.map((m, i) => {
+              const value = hydrated ? progress[m.id] : 0;
+              const done = value >= 100;
+              const prev = MODULES[i - 1];
+              const locked = !!prev && (hydrated ? progress[prev.id] : 0) < 100;
+              return (
+                <article
+                  key={m.id}
+                  className={`rounded-2xl border p-5 transition-colors ${
+                    done
+                      ? "border-accent bg-accent/5"
+                      : locked
+                        ? "border-dashed border-border bg-muted/40 opacity-70"
+                        : "border-border bg-card"
                   }`}
-                  aria-hidden
                 >
-                  {unlocked ? m.medalIcon : "🔒"}
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-semibold text-foreground">{m.title}</h3>
+                    <span className="text-lg" aria-hidden>
+                      {done ? m.medalIcon : "🔒"}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {locked
+                      ? `Completa ${prev?.title.split(" · ")[0]} para desbloquear.`
+                      : m.summary}
+                  </p>
+                  <ProgressBar value={value} className="mt-4" />
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {value}% completado
+                  </p>
+                  <Button
+                    variant={done ? "secondary" : "default"}
+                    size="sm"
+                    className="mt-4 w-full"
+                    disabled={locked}
+                    onClick={() => setPracticing(m)}
+                  >
+                    {locked
+                      ? "Bloqueado"
+                      : done
+                        ? "Repasar ejercicios"
+                        : "Resolver ejercicios"}
+                  </Button>
+                </article>
+              );
+            })}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="logros">
+          <p className="mt-5 text-sm text-muted-foreground">
+            {hydrated ? earned.length : 0} de {MODULES.length} medallas desbloqueadas ·
+            toca una medalla para celebrar de nuevo
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {MODULES.map((m) => {
+              const unlocked = hydrated && progress[m.id] >= 100;
+              return (
+                <div
+                  key={m.id}
+                  className={`rounded-2xl border p-4 text-center transition-all ${
+                    unlocked
+                      ? "border-accent bg-card shadow-glow"
+                      : "border-dashed border-border bg-muted/40"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    disabled={!unlocked}
+                    aria-label={
+                      unlocked ? `Celebrar ${m.medalName}` : `${m.medalName} bloqueada`
+                    }
+                    onClick={(e) => burstFromElement(e.currentTarget)}
+                    className={`mx-auto flex size-10 items-center justify-center rounded-full text-lg transition-transform ${
+                      unlocked
+                        ? "bg-gradient-medal hover:scale-110 active:scale-95"
+                        : "bg-muted opacity-50 grayscale"
+                    }`}
+                  >
+                    <span aria-hidden>{unlocked ? m.medalIcon : "🔒"}</span>
+                  </button>
+                  <p className="mt-2 text-sm font-semibold text-foreground">
+                    {m.medalName}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {unlocked ? m.medalDescription : "Bloqueada"}
+                  </p>
                 </div>
-                <p className="mt-3 text-sm font-semibold text-foreground">
-                  {m.medalName}
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {unlocked ? m.medalDescription : "Bloqueada"}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+              );
+            })}
+          </div>
+        </TabsContent>
+      </Tabs>
+
 
       <DevPanel progress={progress} onComplete={handleComplete} onReset={resetAll} />
       <ExerciseDialog
