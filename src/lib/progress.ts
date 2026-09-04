@@ -80,13 +80,13 @@ export const MODULES: ModuleDef[] = [
 export type Exercise = { a: number; b: number };
 
 export const EXERCISES: Record<ModuleId, Exercise[]> = {
-  "modulo-1": [{ a: 12, b: 13 }],
-  "modulo-2": [{ a: 27, b: 18 }],
-  "modulo-3": [{ a: 57, b: 38 }],
-  "modulo-final": [{ a: 68, b: 57 }],
-  "modulo-5": [{ a: 45, b: 39 }],
-  "modulo-6": [{ a: 83, b: 29 }],
-  "modulo-7": [{ a: 76, b: 65 }],
+  "modulo-1": [{ a: 2, b: 3 }],
+  "modulo-2": [{ a: 4, b: 5 }],
+  "modulo-3": [{ a: 6, b: 2 }],
+  "modulo-final": [{ a: 3, b: 4 }],
+  "modulo-5": [{ a: 5, b: 3 }],
+  "modulo-6": [{ a: 7, b: 2 }],
+  "modulo-7": [{ a: 4, b: 4 }],
 };
 
 export function getHints(a: number, b: number): string[] {

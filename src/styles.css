@@ -138,8 +138,8 @@
   --animate-halo-spin: halo-spin 7s linear infinite;
   --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
   --animate-sparkle: sparkle 1.6s ease-in-out infinite;
-  --animate-trumpet-left: trumpet-left 2.4s ease-out forwards;
-  --animate-trumpet-right: trumpet-right 2.4s ease-out forwards;
+
+
 
   @keyframes medal-pop {
     0% {
