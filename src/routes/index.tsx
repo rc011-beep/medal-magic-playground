@@ -134,7 +134,7 @@ function Index() {
                     size="sm"
                     className="mt-4 w-full"
                     disabled={locked}
-                    onClick={() => setPracticing(m)}
+                    onClick={() => openPractice(m)}
                   >
                     {locked
                       ? "Bloqueado"
