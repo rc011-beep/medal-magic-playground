@@ -6,6 +6,8 @@ import { DevPanel } from "@/components/DevPanel";
 import { ExerciseDialog } from "@/components/ExerciseDialog";
 import { Button } from "@/components/ui/button";
 import { Progress as ProgressBar } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { burstFromElement } from "@/lib/celebrate";
 
 export const Route = createFileRoute("/")({
   head: () => ({
