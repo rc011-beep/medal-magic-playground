@@ -42,7 +42,19 @@ function Index() {
     MODULES.reduce((sum, m) => sum + progress[m.id], 0) / MODULES.length,
   );
 
+  const isLocked = (id: ModuleId) => {
+    const i = MODULES.findIndex((m) => m.id === id);
+    const prev = MODULES[i - 1];
+    return !!prev && (hydrated ? progress[prev.id] : 0) < 100;
+  };
+
+  const openPractice = (m: ModuleDef) => {
+    if (isLocked(m.id)) return;
+    setPracticing(m);
+  };
+
   const handleComplete = (id: ModuleId) => {
+    if (isLocked(id)) return;
     completeModule(id);
     const mod = MODULES.find((m) => m.id === id) ?? null;
     setCelebrating(mod);
